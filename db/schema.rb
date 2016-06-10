@@ -11,7 +11,33 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 0) do
+ActiveRecord::Schema.define(version: 10) do
+
   # These are extensions that must be enabled in order to support this database
-  enable_extension 'plpgsql'
+  enable_extension "plpgsql"
+
+  create_table "bookings", force: :cascade do |t|
+    t.integer  "car_id"
+    t.datetime "departure_datetime"
+    t.integer  "departure_parking_space_id"
+    t.datetime "arrival_datetime"
+    t.integer  "arrival_parking_space_id"
+  end
+
+  add_index "bookings", ["arrival_parking_space_id"], name: "index_bookings_on_arrival_parking_space_id", using: :btree
+  add_index "bookings", ["car_id"], name: "index_bookings_on_car_id", using: :btree
+  add_index "bookings", ["departure_parking_space_id"], name: "index_bookings_on_departure_parking_space_id", using: :btree
+
+  create_table "cars", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "initial_parking_space_id"
+    t.datetime "initial_datetime"
+  end
+
+  add_index "cars", ["initial_parking_space_id"], name: "index_cars_on_initial_parking_space_id", using: :btree
+
+  create_table "parking_spaces", force: :cascade do |t|
+    t.string "location_name"
+  end
+
 end
